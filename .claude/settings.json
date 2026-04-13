@@ -1,0 +1,30 @@
+{
+	"hooks": {
+		"PostToolUse": [
+			{
+				"matcher": "Write|Edit",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "jq -r '.tool_response.filePath // .tool_input.file_path' | { read -r f; ext=\"${f##*.}\"; if [ \"$ext\" = \"ts\" ] || [ \"$ext\" = \"tsx\" ]; then npx biome check \"$f\" 2>&1; npx tsc --noEmit 2>&1; fi; }",
+						"timeout": 30,
+						"statusMessage": "Running linter + type checker..."
+					}
+				]
+			}
+		],
+		"Stop": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "npm run lint 2>&1; LINT=$?; npm run typecheck 2>&1; TSC=$?; if [ $LINT -ne 0 ] || [ $TSC -ne 0 ]; then echo '{\"decision\":\"block\",\"reason\":\"Checks failed. Fix before finishing.\"}'; exit 2; fi",
+						"timeout": 120,
+						"statusMessage": "Quality gate: lint + typecheck..."
+					}
+				]
+			}
+		]
+	},
+	"deny": ["Bash(command:*--no-verify*)"]
+}
