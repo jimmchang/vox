@@ -10,6 +10,7 @@ import { events, personas, reports, simulations, touchpoints } from "@/db/schema
 import { ComparisonTable } from "./comparison-table";
 import { ComprehensionHeatmap } from "./comprehension-heatmap";
 import { DropoutFunnelChart } from "./dropout-funnel-chart";
+import { ReportMarkdown } from "./report-markdown";
 
 type SimulationStatus = "extracting" | "ready" | "running" | "completed" | "failed";
 
@@ -239,9 +240,7 @@ export default async function SimulationDetailPage({
 								</CardHeader>
 								<CardContent>
 									{reportRow ? (
-										<div className="whitespace-pre-wrap font-mono text-sm leading-relaxed">
-											{reportRow.markdown}
-										</div>
+										<ReportMarkdown content={reportRow.markdown} />
 									) : (
 										<p className="text-muted-foreground">No report has been generated yet.</p>
 									)}

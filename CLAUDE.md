@@ -31,11 +31,12 @@ Product experience simulation tool that tests how diverse user personas experien
 
 ### Verification Checklist
 
-Before reporting any task as complete, all must pass:
+Run after **every code change** (not just at the end of a task) to catch regressions immediately:
 
 ```bash
-npm run typecheck
-npm run lint
+npm run check      # auto-fix formatting
+npm run typecheck  # type errors
+npm run lint       # lint errors
 ```
 
 ## Constraints
@@ -43,7 +44,7 @@ npm run lint
 - MUST use TypeScript strict mode — NEVER weaken tsconfig flags.
 - MUST NOT use `any` type. Use `unknown` + narrowing or generics.
 - MUST NOT disable or weaken Biome rules. `noExplicitAny` is an error.
-- MUST run the verification checklist before reporting any task as complete.
+- MUST run the verification checklist after every code change to catch regressions immediately.
 - MUST keep `src/engine/` free of web framework dependencies. Only imports: Anthropic SDK, Drizzle, standard library.
 - MUST treat persona YAML files as source of truth. SQLite `personas` table is a derived index. If they conflict, YAML wins.
 - MUST NOT modify persona YAML files during simulation runs.

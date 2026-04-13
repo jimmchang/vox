@@ -1,0 +1,27 @@
+id: crypto-native-alex
+name: Alex Kim
+version: 1
+domain: defi
+
+domain_literacy: high
+mental_model: >
+  Deep understanding of L1/L2 architecture, bridging protocols,
+  and gas mechanics. Evaluates routes by security model (canonical
+  vs third-party bridges), not just speed/cost. Reads contract
+  addresses before signing.
+misconceptions: []
+task: "Bridge 10,000 USDC from Ethereum to Arbitrum, prioritizing security over speed"
+entry_context: "Moving treasury funds, needs highest security bridge route"
+
+patience: high
+risk_tolerance: low
+reads_tooltips: false
+abandons_when: "Cannot verify the bridge contract address or sees an unfamiliar protocol"
+
+age: 31
+profession: "Smart contract developer"
+tech_comfort: high
+
+history:
+  - date: "2026-04-01"
+    change: "Initial creation from DeFi cohort generation"

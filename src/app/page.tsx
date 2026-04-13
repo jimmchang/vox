@@ -1,151 +1,108 @@
-export const dynamic = "force-dynamic";
-
-import { sql } from "drizzle-orm";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
-import { db } from "@/db";
-import { simulations } from "@/db/schema";
-
-type SimulationStatus = "extracting" | "ready" | "running" | "completed" | "failed";
-
-const statusVariant: Record<SimulationStatus, "default" | "secondary" | "destructive"> = {
-	completed: "default",
-	running: "secondary",
-	extracting: "secondary",
-	ready: "secondary",
-	failed: "destructive",
-};
-
-function StatusBadge({ status }: { status: SimulationStatus }) {
-	return <Badge variant={statusVariant[status]}>{status}</Badge>;
-}
-
-function formatDate(date: Date): string {
-	return date.toLocaleDateString("en-US", {
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	});
-}
-
-function EmptyState() {
-	return (
-		<div className="flex flex-col items-center gap-2 py-16 text-center">
-			<p className="text-lg font-medium text-muted-foreground">No simulations yet</p>
-			<p className="text-sm text-muted-foreground">
-				Run your first simulation to see results here.
-			</p>
-		</div>
-	);
-}
-
-interface SimulationRow {
-	id: string;
-	name: string;
-	status: SimulationStatus;
-	createdAt: Date;
-	personaCount: number;
-	touchpointCount: number;
-	totalEvents: number;
-	completedEvents: number;
-}
-
-function completionRate(row: SimulationRow): string {
-	if (row.totalEvents === 0) {
-		return "-";
-	}
-	const pct = Math.round((row.completedEvents / row.totalEvents) * 100);
-	return `${String(pct)}%`;
-}
-
-function SimulationTable({ rows }: { rows: SimulationRow[] }) {
-	return (
-		<Table>
-			<TableHeader>
-				<TableRow>
-					<TableHead>Name</TableHead>
-					<TableHead>Date</TableHead>
-					<TableHead className="text-right">Personas</TableHead>
-					<TableHead className="text-right">Touchpoints</TableHead>
-					<TableHead className="text-right">Completion</TableHead>
-					<TableHead>Status</TableHead>
-				</TableRow>
-			</TableHeader>
-			<TableBody>
-				{rows.map((row) => (
-					<TableRow key={row.id}>
-						<TableCell>
-							<Link
-								href={`/simulation/${row.id}`}
-								className="font-medium text-foreground hover:underline"
-							>
-								{row.name}
-							</Link>
-						</TableCell>
-						<TableCell className="text-muted-foreground">{formatDate(row.createdAt)}</TableCell>
-						<TableCell className="text-right">{row.personaCount}</TableCell>
-						<TableCell className="text-right">{row.touchpointCount}</TableCell>
-						<TableCell className="text-right">{completionRate(row)}</TableCell>
-						<TableCell>
-							<StatusBadge status={row.status} />
-						</TableCell>
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
-	);
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
-	const rows = db
-		.select({
-			id: simulations.id,
-			name: simulations.name,
-			status: simulations.status,
-			createdAt: simulations.createdAt,
-			personaCount:
-				sql<number>`(SELECT COUNT(*) FROM simulation_personas WHERE simulation_personas.simulation_id = simulations.id)`.as(
-					"persona_count",
-				),
-			touchpointCount:
-				sql<number>`(SELECT COUNT(*) FROM touchpoints WHERE touchpoints.simulation_id = simulations.id)`.as(
-					"touchpoint_count",
-				),
-			totalEvents:
-				sql<number>`(SELECT COUNT(*) FROM events WHERE events.simulation_id = simulations.id)`.as(
-					"total_events",
-				),
-			completedEvents:
-				sql<number>`(SELECT COUNT(*) FROM events WHERE events.simulation_id = simulations.id AND events.would_proceed = 1)`.as(
-					"completed_events",
-				),
-		})
-		.from(simulations)
-		.all();
-
-	if (rows.length === 0) {
-		return (
-			<main className="mx-auto max-w-[1200px] px-6 py-8">
-				<h1 className="text-2xl font-semibold">Simulations</h1>
-				<EmptyState />
-			</main>
-		);
-	}
-
 	return (
-		<main className="mx-auto max-w-[1200px] px-6 py-8">
-			<div className="flex flex-col gap-8">
-				<h1 className="text-2xl font-semibold">Simulations</h1>
-				<SimulationTable rows={rows} />
+		<main className="mx-auto max-w-[800px] px-6 py-12">
+			<div className="flex flex-col gap-10">
+				<div>
+					<h1 className="text-3xl font-bold">Vox</h1>
+					<p className="mt-2 text-lg text-muted-foreground">
+						Product experience simulation tool. This is a read-only dashboard — simulations are run
+						from the CLI using the{" "}
+						<code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">/vox</code> skill in
+						Claude Code.
+					</p>
+				</div>
+
+				<div className="flex flex-col gap-4">
+					<h2 className="text-xl font-semibold">How it works</h2>
+					<div className="grid gap-4 sm:grid-cols-2">
+						<Card>
+							<CardHeader className="pb-2">
+								<CardTitle className="text-base">1. Run a simulation</CardTitle>
+							</CardHeader>
+							<CardContent className="text-sm text-muted-foreground">
+								In Claude Code, type{" "}
+								<code className="rounded bg-muted px-1 py-0.5 font-mono">/vox</code> and paste a
+								PRD. The skill extracts touchpoints, selects personas, and simulates each persona
+								walking through the flow.
+							</CardContent>
+						</Card>
+						<Card>
+							<CardHeader className="pb-2">
+								<CardTitle className="text-base">2. Review results here</CardTitle>
+							</CardHeader>
+							<CardContent className="text-sm text-muted-foreground">
+								This dashboard visualizes what happened. Browse simulation reports, dropout funnels,
+								comprehension heatmaps, and current-vs-proposed comparisons.
+							</CardContent>
+						</Card>
+					</div>
+				</div>
+
+				<div className="flex flex-col gap-4">
+					<h2 className="text-xl font-semibold">Reading the dashboard</h2>
+					<div className="flex flex-col gap-3">
+						<DashboardGuide
+							title="Simulations"
+							href="/simulations"
+							description="List of all simulation runs. Each row shows persona count, touchpoints, and completion rate (% of touchpoint visits where the persona proceeded)."
+						/>
+						<DashboardGuide
+							title="Simulation detail"
+							href="/simulations"
+							description="Click into a simulation to see: the full markdown report, a dropout funnel (how many personas survived each step), a comprehension heatmap (scores 1-10 per persona per touchpoint), and a current-vs-proposed comparison table."
+						/>
+						<DashboardGuide
+							title="Personas"
+							href="/personas"
+							description="Browse the persona library grouped by domain. Each persona has a literacy level, mental model, misconceptions, and abandonment triggers defined in YAML."
+						/>
+						<DashboardGuide
+							title="Compare"
+							href="/compare"
+							description="Side-by-side comparison of current vs proposed flows across all personas and touchpoints."
+						/>
+					</div>
+				</div>
+
+				<div className="flex flex-col gap-3 rounded-lg border bg-muted/30 p-6">
+					<h2 className="text-base font-semibold">Quick start</h2>
+					<ol className="ml-5 list-decimal space-y-2 text-sm text-muted-foreground">
+						<li>Open Claude Code in this project directory</li>
+						<li>
+							Type <code className="rounded bg-muted px-1 py-0.5 font-mono">/vox</code> and select
+							&quot;Test a PRD&quot;
+						</li>
+						<li>Paste your product requirements document</li>
+						<li>
+							Run <code className="rounded bg-muted px-1 py-0.5 font-mono">npm run dev</code> and
+							open this dashboard to view results
+						</li>
+					</ol>
+				</div>
 			</div>
 		</main>
+	);
+}
+
+function DashboardGuide({
+	title,
+	href,
+	description,
+}: {
+	title: string;
+	href: string;
+	description: string;
+}) {
+	return (
+		<Link
+			href={href}
+			className="group flex flex-col gap-1 rounded-lg border p-4 transition-colors hover:bg-muted/50"
+		>
+			<span className="text-sm font-medium group-hover:underline">{title}</span>
+			<span className="text-sm text-muted-foreground">{description}</span>
+		</Link>
 	);
 }

@@ -1,0 +1,30 @@
+id: crypto-novice-marcus
+name: Marcus Chen
+version: 1
+domain: defi
+
+domain_literacy: low
+mental_model: >
+  Thinks USDC is the same everywhere. Doesn't understand that
+  "USDC on Arbitrum" is different from "USDC on Ethereum."
+  Confuses gas fees with bridge fees. Thinks "approve" means
+  he's giving away his tokens.
+misconceptions:
+  - "Bridging is like sending to another wallet"
+  - "Gas fees are the same on every chain"
+  - "Approving a token means giving someone access to all my money"
+task: "Bridge 100 USDC from Ethereum to Arbitrum"
+entry_context: "Clicked a link from a friend who said Arbitrum is cheaper"
+
+patience: low
+risk_tolerance: low
+reads_tooltips: true
+abandons_when: "Sees unfamiliar terminology, unexpected fees, or anything that looks like a scam"
+
+age: 28
+profession: "Graphic designer"
+tech_comfort: medium
+
+history:
+  - date: "2026-04-01"
+    change: "Initial creation from DeFi cohort generation"

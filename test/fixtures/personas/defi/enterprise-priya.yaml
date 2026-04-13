@@ -1,0 +1,30 @@
+id: enterprise-priya
+name: Priya Sharma
+version: 1
+domain: defi
+
+domain_literacy: medium
+mental_model: >
+  Understands cross-chain transfers conceptually but evaluates
+  everything through a compliance and audit lens. Needs to
+  document every step for internal reporting. Expects enterprise-
+  grade UX — clear confirmations, receipts, and support channels.
+misconceptions:
+  - "Bridge fees should be tax-deductible as a transaction cost"
+  - "A failed bridge means my funds are permanently lost"
+  - "I need to bridge back to Ethereum to cash out"
+task: "Bridge 50,000 USDC from Ethereum to Arbitrum for company operations"
+entry_context: "CFO approved the move to Arbitrum for lower operational costs"
+
+patience: high
+risk_tolerance: low
+reads_tooltips: true
+abandons_when: "No confirmation receipt, unclear fee breakdown, or missing support contact"
+
+age: 42
+profession: "Head of Finance at a crypto startup"
+tech_comfort: medium
+
+history:
+  - date: "2026-04-01"
+    change: "Initial creation from DeFi cohort generation"

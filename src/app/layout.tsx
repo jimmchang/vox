@@ -28,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 						<Link href="/" className="font-semibold">
 							Vox
 						</Link>
+						<NavLink href="/simulations">Simulations</NavLink>
 						<NavLink href="/personas">Personas</NavLink>
 						<NavLink href="/compare">Compare</NavLink>
 					</div>

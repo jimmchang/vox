@@ -8,18 +8,24 @@ interface HeatmapDatum {
 
 const SCORE_COLORS: Record<number, string> = {
 	1: "#ef4444", // red
-	2: "#f97316", // orange
-	3: "#f59e0b", // amber
-	4: "#84cc16", // yellow-green
-	5: "#22c55e", // green
+	2: "#f87171", // red-light
+	3: "#f97316", // orange
+	4: "#fb923c", // orange-light
+	5: "#f59e0b", // amber
+	6: "#fbbf24", // amber-light
+	7: "#a3e635", // lime
+	8: "#84cc16", // yellow-green
+	9: "#4ade80", // green-light
+	10: "#22c55e", // green
 };
 
 function getScoreColor(score: number): string {
-	return SCORE_COLORS[score] ?? "#6b7280";
+	const clamped = Math.max(1, Math.min(10, score));
+	return SCORE_COLORS[clamped] ?? "#6b7280";
 }
 
 function getTextColor(score: number): string {
-	return score <= 2 ? "#ffffff" : "#000000";
+	return score <= 3 ? "#ffffff" : "#000000";
 }
 
 export function ComprehensionHeatmap({ data }: { data: HeatmapDatum[] }) {
@@ -75,7 +81,9 @@ export function ComprehensionHeatmap({ data }: { data: HeatmapDatum[] }) {
 										backgroundColor: score !== undefined ? getScoreColor(score) : "#e5e7eb",
 										color: score !== undefined ? getTextColor(score) : "#9ca3af",
 									}}
-									title={score !== undefined ? `${persona} @ ${tp}: ${String(score)}/5` : "No data"}
+									title={
+										score !== undefined ? `${persona} @ ${tp}: ${String(score)}/10` : "No data"
+									}
 								>
 									{score !== undefined ? String(score) : "-"}
 								</div>
@@ -88,7 +96,7 @@ export function ComprehensionHeatmap({ data }: { data: HeatmapDatum[] }) {
 			{/* Legend */}
 			<div className="mt-4 flex items-center gap-4">
 				<span className="text-xs text-muted-foreground">Score:</span>
-				{[1, 2, 3, 4, 5].map((s) => (
+				{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((s) => (
 					<div key={s} className="flex items-center gap-1">
 						<div className="size-3 rounded-sm" style={{ backgroundColor: getScoreColor(s) }} />
 						<span className="text-xs text-muted-foreground">{String(s)}</span>
