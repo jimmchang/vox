@@ -22,6 +22,25 @@
 			}
 		}
 	},
+	"overrides": [
+		{
+			"includes": ["src/components/ui/**"],
+			"linter": { "enabled": false },
+			"formatter": { "enabled": false },
+			"assist": { "enabled": false }
+		},
+		{
+			"includes": ["**/*.css"],
+			"linter": { "enabled": false },
+			"formatter": { "enabled": false }
+		}
+	],
+	"css": {
+		"parser": {
+			"cssModules": true,
+			"tailwindDirectives": true
+		}
+	},
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double"

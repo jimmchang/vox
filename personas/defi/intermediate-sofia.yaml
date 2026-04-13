@@ -1,0 +1,30 @@
+id: intermediate-sofia
+name: Sofia Ramirez
+version: 2
+domain: defi
+
+domain_literacy: medium
+mental_model: >
+  Understands tokens live on different chains but unsure about
+  bridging mechanics. Knows gas fees vary but doesn't understand
+  why routes have different speeds.
+misconceptions:
+  - "Faster bridges are always more expensive"
+  - "All bridges use the same underlying protocol"
+task: "Bridge 500 USDC from Ethereum to Arbitrum for yield farming"
+entry_context: "Researched DeFi yields and decided to move funds to Arbitrum"
+
+patience: medium
+risk_tolerance: medium
+reads_tooltips: false
+abandons_when: "Process takes more than 5 steps or requires signing multiple transactions"
+
+age: 34
+profession: "Financial analyst"
+tech_comfort: high
+
+history:
+  - date: "2026-04-01"
+    change: "Initial creation from DeFi cohort generation"
+  - date: "2026-04-08"
+    change: "Updated misconceptions based on user research interviews"
